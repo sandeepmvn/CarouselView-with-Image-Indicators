@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CarouselViewApp"
+             x:Class="CarouselViewApp.MainPage"
+             xmlns:forms="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions">
+
+    <StackLayout>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="60"/>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <!--Carousel View-->
+        <AbsoluteLayout HeightRequest="300" Grid.Row="0">
+            <forms:CarouselViewControl ItemsSource="{Binding lstImage}" Position="{Binding position}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <forms:CarouselViewControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding FullPath}" AbsoluteLayout.LayoutBounds="0,0,1,300" AbsoluteLayout.LayoutFlags="WidthProportional" Aspect="Fill"/>
+                    </DataTemplate>
+                </forms:CarouselViewControl.ItemTemplate>
+            </forms:CarouselViewControl>
+        </AbsoluteLayout>
+
+        
+        <!--Indicators-->
+        <RelativeLayout Grid.Row="1" 
+							HeightRequest="100"
+							VerticalOptions="Start">
+            <ListView Rotation="270" ItemsSource="{Binding lstImage}" RowHeight="100" SeparatorVisibility="None"
+                              RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.5, Constant=-50}"
+                              RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=-0.5, Constant=50}"
+                              RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=100}"
+                              RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                              CachingStrategy="RecycleElement" x:Name="reqImage">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView  Rotation="90" BackgroundColor="Transparent" Margin="0,0,5,0">
+                                <AbsoluteLayout HeightRequest="60">
+                                    <Image Source="{Binding FullPath}" AbsoluteLayout.LayoutBounds="0,0,1,60" AbsoluteLayout.LayoutFlags="WidthProportional" Aspect="Fill"  x:Name="img">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding img_clicked}" CommandParameter="{x:Reference img}" BindingContext="{Binding Source={x:Reference reqImage}, Path=BindingContext}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </AbsoluteLayout>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RelativeLayout>
+
+    </StackLayout>
+
+</ContentPage>
